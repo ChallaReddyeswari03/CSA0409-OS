@@ -1,0 +1,84 @@
+Q1) 
+i) Deadlock occurs when:
+P1 locks R1
+P2 locks R2
+After 100 ms:
+P1 requests R2, but R2 is already locked by P2
+P2 requests R1, but R1 is already locked by P1
+Both processes wait forever
+This creates a Circular Wait condition
+ii) OPTIMIZATION:
+Use a Fixed Resource Ordering
+Both processes should acquire resources in the same order
+Use try-lock with timeout.
+Use deadlock detection and recovery
+Use single global lock if appropriate
+
+Q2)
+i) CAUSE:
+Excessive I/O waiting
+Slow disk/network devices
+Frequent blocking system calls
+-> DEBUGGING:
+Ready -> Running -> I/O Request -> Waiting -> I/O Complete -> Ready
+ii) SYSTEM-LEVEL OPTIMIZATION
+Increase Multiprogramming
+Load more CPU-bound processes
+When one process waits for I/O, another process uses the CPU
+Improve I/O Performance
+Faster SSDs
+Asynchronous I/O
+DMA
+Buffering and caching -> This reduces waiting time
+Better scheduling (Multilevel Feedback Queue)
+Overlap CPU and I/O
+Reduce unnecessary blocking
+
+Q3)
+i) MEMORY ISSUE:
+The issue is poor memory locality rather than insufficient RAM.Large heap accessed randomly
+REASONS:
+Threads access scattered memory pages
+Working set exceeds cache/TLB efficiency
+Frequent page replacement
+ii) OPTIMIZATIONS:
+1) Reduce Heap Usage
+Free unused memory
+Use memory pools
+Allocate memory efficiently
+This reduces page faults
+2) Reduce Stack Size / Number of Threads
+Use thread pools
+Reduce stack size if possible
+Reuse threads
+This lowers memory overhead
+
+Q4)
+i) ROOT CAUSE:
+The scheduler always executes higher-priority queues first
+As new processes continuously enter Q1 and Q2,
+ Q1 → Executed
+ Q2 → Executed
+ Q1 → Executed
+ Q2 → Executed
+ Q3 is never selected
+ P5 suffers starvation
+ii) OPTIMIZATION:
+Aging
+Increase the priority of processes waiting for a long time
+Eventually P5 reaches a higher-priority queue and gets CPU time
+Periodically allocate CPU time to Q3
+Use Multilevel Feedback Queue (MLFQ)
+
+Q5)
+i) WHY CONTEXT SWITCHING IS SO HIGH:
+Small Time Quantum
+Burst Time = 2 ms
+Quantum = 1 ms
+Each thread is preempted before completing.Frequent I/O
+Threads often block for I/O.
+ii) OPTIMIZATION:
+Reduce I/O Blocking
+Increase Time QuantumUse thread pools.
+Improve scheduler efficiency.
+Minimize unnecessary preemption
